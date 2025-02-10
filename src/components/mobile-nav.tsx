@@ -99,7 +99,7 @@ export default function MobileNav() {
               <Facebook className="h-5 w-5 hover:primary" />
             </Link>
           </div>
-          <div className="flex flex-col items-center mt-8">
+          <div className="flex flex-col items-center mt-4">
             {user && <UserButton user={user} />}
             {!user && session.status !== "loading" && <SignInButton />}
           </div>
