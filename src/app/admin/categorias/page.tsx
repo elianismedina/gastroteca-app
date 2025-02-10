@@ -2,6 +2,15 @@
 import React, { useEffect, useState } from "react";
 import CreateCategoryForm from "./components/create-category-form";
 import { ListAllCategories } from "@/actions/actions";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import Image from "next/image";
 
 interface Category {
   id: string;
@@ -33,11 +42,35 @@ const CategoriesPage = () => {
       <h1>Categorías</h1>
       <CreateCategoryForm />
       <h2>Todas las categorías</h2>
-      <ul>
-        {categories.map((category) => (
-          <li key={category.id}>{category.categoryName}</li>
-        ))}
-      </ul>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Nombre</TableHead>
+            <TableHead>Descripción</TableHead>
+            <TableHead>Imagen</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {categories.map((category) => (
+            <TableRow key={category.id}>
+              <TableCell>{category.categoryName}</TableCell>
+              <TableCell>{category.description}</TableCell>
+              <TableCell>
+                {category.imageUrl ? (
+                  <Image
+                    src={category.imageUrl}
+                    alt={category.categoryName}
+                    width="50"
+                    height="50"
+                  />
+                ) : (
+                  "No Image"
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 };
