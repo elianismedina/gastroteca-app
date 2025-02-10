@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
+import { usePathname } from "next/navigation"; // Import usePathname
 import { Separator } from "./ui/separator";
 import { Instagram, Linkedin, Facebook } from "lucide-react";
 
@@ -28,7 +31,15 @@ const footerLinks = [
     href: "#",
   },
 ];
+
 const Footer = () => {
+  const pathname = usePathname(); // Initialize usePathname
+  const isAdminPage = pathname.startsWith("/admin"); // Check if the current route is an admin page
+
+  if (isAdminPage) {
+    return null; // Do not render the footer on admin pages
+  }
+
   return (
     <div className=" flex flex-col bg-primary border-t">
       <footer>

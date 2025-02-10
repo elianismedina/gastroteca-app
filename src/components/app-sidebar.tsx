@@ -1,3 +1,4 @@
+"use client";
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
 
 import {
@@ -10,6 +11,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import UserButton from "../components/UserButtton";
+import { signIn } from "next-auth/react";
+import { Button } from "./ui/button";
+import { useSession } from "next-auth/react";
 
 // Menu items.
 const items = [
@@ -41,6 +46,8 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const session = useSession();
+  const user = session.data?.user;
   return (
     <Sidebar>
       <SidebarContent>
@@ -58,10 +65,17 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <div className="py-5 px-3">
+                {user && <UserButton user={user} />}
+                {!user && session.status !== "loading" && <SignInButton />}
+              </div>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
+}
+function SignInButton() {
+  return <Button onClick={() => signIn()}>Iniciar sesión</Button>;
 }
