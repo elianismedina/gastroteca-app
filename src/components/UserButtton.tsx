@@ -1,5 +1,5 @@
 import avatarPlaceholder from "../assets/images/avatar_placeholder.png";
-import { Lock, LogOut, Settings } from "lucide-react";
+import { Lock, LogOut } from "lucide-react";
 import { User } from "next-auth";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
@@ -17,9 +17,10 @@ import {
 
 interface UserButtonProps {
   user: User;
+  onCloseNav?: () => void;
 }
 
-export default function UserButton({ user }: UserButtonProps) {
+export default function UserButton({ user, onCloseNav }: UserButtonProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,15 +38,9 @@ export default function UserButton({ user }: UserButtonProps) {
         <DropdownMenuLabel>{user.name || "User"}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <Link href="/settings">
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </Link>
-          </DropdownMenuItem>
           {user.role === "ADMIN" && (
             <DropdownMenuItem asChild>
-              <Link href="/admin">
+              <Link href="/admin" onClick={onCloseNav}>
                 <Lock className="mr-2 h-4 w-4" />
                 Admin
               </Link>
@@ -55,7 +50,10 @@ export default function UserButton({ user }: UserButtonProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <button
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={() => {
+              signOut({ callbackUrl: "/" });
+              if (onCloseNav) onCloseNav();
+            }}
             className="flex w-full items-center"
           >
             <LogOut className="mr-2 h-4 w-4" /> Cerrar sesión

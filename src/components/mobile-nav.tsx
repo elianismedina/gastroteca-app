@@ -12,7 +12,7 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { signIn, useSession } from "next-auth/react";
 import UserButton from "./UserButtton";
-import React from "react";
+import React, { useState } from "react";
 import { Separator } from "./ui/separator";
 import Logo from "./Logo";
 
@@ -74,6 +74,11 @@ const navbarLinks = [
 export default function MobileNav() {
   const session = useSession();
   const user = session.data?.user;
+  const [isNavOpen, setIsNavOpen] = useState(false);
+
+  const handleCloseNav = () => {
+    setIsNavOpen(false);
+  };
 
   return (
     <div className="md:hidden flex flex-col-2 justify-between w-full">
@@ -82,7 +87,7 @@ export default function MobileNav() {
           <Logo />
         </Link>
       </div>
-      <Sheet>
+      <Sheet open={isNavOpen} onOpenChange={setIsNavOpen}>
         <SheetTrigger>
           <AlignJustify className="mt-4" size={40} />
         </SheetTrigger>
@@ -100,7 +105,11 @@ export default function MobileNav() {
             </Link>
           </div>
           <div className="flex flex-col items-center mt-4">
-            {user && <UserButton user={user} />}
+            {user && (
+              <SheetClose asChild>
+                <UserButton user={user} onCloseNav={handleCloseNav} />
+              </SheetClose>
+            )}
             {!user && session.status !== "loading" && <SignInButton />}
           </div>
         </SheetContent>
@@ -108,6 +117,7 @@ export default function MobileNav() {
     </div>
   );
 }
+
 interface NavBarProps {
   withSheetClose?: boolean;
 }
@@ -115,6 +125,7 @@ interface NavBarProps {
 function SignInButton() {
   return <Button onClick={() => signIn()}>Iniciar sesión</Button>;
 }
+
 const NavBar = (props: NavBarProps) => {
   const currentPath = usePathname();
   const isActive = (path: string) => {
