@@ -58,12 +58,13 @@ model Booking {
 }
 
 model Category {
-  id        String     @id @default(uuid())
-  name      String
-  menuItems MenuItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String     @id @default(uuid())
+  categoryName String
+  description  String?
+  imageUrl     String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  MenuItem     MenuItem[]
 
   @@map("categories")
 }
@@ -74,11 +75,11 @@ model MenuItem {
   description String?
   price       Float
   imageUrl    String?
-  categoryId  String
+  categoryId  String?
   isAvailable Boolean     @default(true)
   promotions  Promotion[]
   orderItems  OrderItem[]
-  category    Category    @relation(fields: [categoryId], references: [id])
+  category    Category?   @relation(fields: [categoryId], references: [id])
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 

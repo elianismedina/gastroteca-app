@@ -25,7 +25,7 @@ const items = [
   },
   {
     title: "Categorías",
-    url: "/admin/categories",
+    url: "/admin/categorias",
     icon: Inbox,
   },
   {
