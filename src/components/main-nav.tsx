@@ -20,7 +20,7 @@ const MyButton: React.ForwardRefRenderFunction<
       href={href}
       onClick={onClick}
       ref={ref}
-      className="font-medium text-md text-white bg-primary hover:bg-secondary transition-colors duration-300 ease-in-out py-3 px-2 rounded-lg"
+      className="font-medium text-md text-white bg-secondary hover:bg-secondary transition-colors duration-300 ease-in-out py-2 px-5 rounded-lg"
     >
       Reservar
     </a>
@@ -45,18 +45,8 @@ export default function MainNav() {
         <div className="flex items-center justify-between space-x-1">
           <div className="py-5 px-3">
             <Link
-              href="/usecases"
-              className="font-medium text-xl text-slate-800 hover:text-400 transition-colors
-              duration-300 ease-in-out"
-            >
-              Casos de uso
-            </Link>
-          </div>
-
-          <div className="py-5 px-3">
-            <Link
               href="/menu"
-              className="font-medium text-xl text-slate-800 hover:text-400 transition-colors
+              className="font-medium text-xl text-slate-900 hover:text-slate-600 transition-colors
               duration-300 ease-in-out"
             >
               Menu
@@ -65,7 +55,7 @@ export default function MainNav() {
           <div className="py-5 px-3">
             <Link
               href="/nosotros"
-              className="font-medium text-xl text-slate-800 hover:text-400 transition-colors
+              className="font-medium text-xl text-slate-900 hover:text-slate-600 transition-colors
               duration-300 ease-in-out"
             >
               Nosotros
@@ -74,7 +64,7 @@ export default function MainNav() {
           <div className="py-5 px-3">
             <Link
               href="/huerta"
-              className="font-medium text-xl text-slate-800 hover:text-400 transition-colors
+              className="font-medium text-xl text-slate-900 hover:text-slate-600 transition-colors
               duration-300 ease-in-out"
             >
               Huerta
@@ -83,7 +73,7 @@ export default function MainNav() {
           <div className="py-5 px-3">
             <Link
               href="/eventos"
-              className="font-medium text-xl text-slate-800 hover:text-400 transition-colors
+              className="font-medium text-xl text-slate-900 hover:text-slate-600 transition-colors
               duration-300 ease-in-out"
             >
               Eventos
@@ -92,7 +82,7 @@ export default function MainNav() {
           <div className="py-5 px-3">
             <Link
               href="/bonos"
-              className="font-medium text-xl text-slate-800 hover:text-400 transition-colors
+              className="font-medium text-xl text-slate-900 hover:text-slate-600 transition-colors
               duration-300 ease-in-out"
             >
               Bonos de regalo
