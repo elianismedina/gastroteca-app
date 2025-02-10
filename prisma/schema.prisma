@@ -57,16 +57,28 @@ model Booking {
   @@map("bookings")
 }
 
+model Category {
+  id        String     @id @default(uuid())
+  name      String
+  menuItems MenuItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("categories")
+}
+
 model MenuItem {
   id          String      @id @default(uuid())
   name        String
   description String?
   price       Float
   imageUrl    String?
-  category    String // e.g., "Appetizer", "Main Course", "Dessert"
+  categoryId  String
   isAvailable Boolean     @default(true)
   promotions  Promotion[]
   orderItems  OrderItem[]
+  category    Category    @relation(fields: [categoryId], references: [id])
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
