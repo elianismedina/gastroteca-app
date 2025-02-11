@@ -4,15 +4,17 @@ import { v2 as cloudinary } from "cloudinary";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { env } from "process";
 import { signIn, signOut } from "../../auth";
 
-const formSchema = z.object({
-  categoryName: z.string().nonempty("Nombre es obligatorio"),
-  description: z.string().nonempty("Descripción es obligatoria"),
-  imageUrl: z.string().nonempty("Imagen es obligatoria"),
-});
+import { env } from "process";
 
+const formSchema = z.object({
+  categoryName: z
+    .string()
+    .min(2, "Category name must be at least 2 characters"),
+  description: z.string().min(5, "Description must be at least 5 characters"),
+  imageUrl: z.string().optional(),
+});
 export async function createCategory(formData: FormData) {
   const file = formData.get("imageUrl") as File;
   const url = await uploadImage(file || undefined);
@@ -20,26 +22,22 @@ export async function createCategory(formData: FormData) {
   const { categoryName, description, imageUrl } = formSchema.parse({
     categoryName: formData.get("categoryName") as string,
     description: formData.get("description") as string,
-    imageUrl: url,
+    imageUrl: url?.toString(),
   });
   await prisma.category.create({
     data: {
-      categoryName,
-      description,
-      imageUrl,
+      categoryName: categoryName,
+      description: description,
+      imageUrl: imageUrl,
     },
   });
-  revalidatePath("/admin/categorias");
-  redirect("/admin/categorias");
+  revalidatePath("/");
+  redirect("/");
 }
 interface UploadResult {
   url: string;
 }
-async function uploadImage(file?: File): Promise<string | null> {
-  if (!file || file.size === 0) {
-    console.warn("No file provided or file is empty.");
-    return null;
-  }
+async function uploadImage(file: File): Promise<string> {
   try {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
@@ -69,13 +67,9 @@ async function uploadImage(file?: File): Promise<string | null> {
     throw error;
   }
 }
-
 export const login = async () => {
-  await signIn("github", { redirectTo: "/" });
+  await signIn("github", { redirectTo: "/quote" });
 };
 export const logout = async () => {
   await signOut({ redirectTo: "/" });
 };
-export async function ListAllCategories() {
-  return await prisma.category.findMany();
-}

@@ -1,78 +1,75 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import CreateCategoryForm from "./components/create-category-form";
-import { ListAllCategories } from "@/actions/actions";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import Image from "next/image";
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-interface Category {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  categoryName: string;
-  description: string | null;
-  imageUrl: string | null;
-}
-
-const CategoriesPage = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const categories = await ListAllCategories();
-        setCategories(categories); // Set the fetched categories to the state
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    getCategories();
-  }, []);
+export default async function CategoriesPage() {
+  // Fetch categories from the database
+  const categories = await prisma.category.findMany({
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
-    <div>
-      <h1>Categorías</h1>
-      <CreateCategoryForm />
-      <h2>Todas las categorías</h2>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Nombre</TableHead>
-            <TableHead>Descripción</TableHead>
-            <TableHead>Imagen</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {categories.map((category) => (
-            <TableRow key={category.id}>
-              <TableCell>{category.categoryName}</TableCell>
-              <TableCell>{category.description}</TableCell>
-              <TableCell>
-                {category.imageUrl ? (
-                  <Image
-                    src={category.imageUrl}
-                    alt={category.categoryName}
-                    width="50"
-                    height="50"
-                  />
-                ) : (
-                  "No Image"
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">Categorias</h1>
+
+      {/* Create New Category Button */}
+      <div className="mb-4">
+        <Link href="categorias/new">
+          <Button>Crear nueva categoría</Button>
+        </Link>
+      </div>
+
+      {/* Categories List */}
+      {categories.length === 0 ? (
+        <p className="text-gray-500">No se encontraron categorías</p>
+      ) : (
+        <div className="border rounded-lg overflow-hidden">
+          <table className="w-full border-collapse">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="border p-2 text-left">Image</th>
+                <th className="border p-2 text-left">Name</th>
+                <th className="border p-2 text-left">Description</th>
+                <th className="border p-2 text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {categories.map((category) => (
+                <tr key={category.id} className="border-t">
+                  {/* Category Image */}
+                  <td className="border p-2">
+                    {category.imageUrl ? (
+                      <img
+                        src={category.imageUrl}
+                        alt={category.categoryName}
+                        className="w-12 h-12 object-cover rounded-md"
+                      />
+                    ) : (
+                      <span className="text-gray-400">No Hay Imagen</span>
+                    )}
+                  </td>
+
+                  {/* Category Name */}
+                  <td className="border p-2">{category.categoryName}</td>
+
+                  {/* Category Description */}
+                  <td className="border p-2">
+                    {category.description || "No hay descripción"}
+                  </td>
+
+                  {/* Actions */}
+                  <td className="border p-2 flex gap-2">
+                    <Link href={`/admin/categorias/${category.id}/edit`}>
+                      <Button variant="outline">Editar</Button>
+                    </Link>
+                    {/* Add delete logic later */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
-};
-
-export default CategoriesPage;
+}

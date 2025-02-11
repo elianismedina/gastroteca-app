@@ -1,5 +1,12 @@
 "use client";
 
+import { v2 as cloudinary } from "cloudinary";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { createCategory } from "../../../../actions/actions";
+import SubmitButton from "../components/submit-button";
 import {
   Form,
   FormControl,
@@ -7,14 +14,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../../components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { createCategory } from "../../../../actions/actions";
-import SubmitButton from "./submit-button";
-import { v2 as cloudinary } from "cloudinary";
-
+} from "@/components/ui/form";
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -22,12 +22,14 @@ cloudinary.config({
 });
 
 const formSchema = z.object({
-  categoryName: z.string().nonempty("Nombre es obligatorio"),
-  description: z.string().nonempty("Descripción es obligatoria"),
-  imageUrl: z.string().nonempty("Imagen es obligatoria"),
+  categoryName: z.string().nonempty("El nombre de la categoría es requerido"),
+  description: z
+    .string()
+    .nonempty("La descripción de la categoría es requerida"),
+  imageUrl: z.string().nonempty("La imagen de la categoría es requerida"),
 });
 
-export default function CreateCategoryForm() {
+export default function CategoryForm() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,13 +41,13 @@ export default function CreateCategoryForm() {
   return (
     <div className="max-w-2xl mx-auto my-4">
       <Form {...form}>
-        <form action={createCategory} className="space-y-2 p-4">
+        <form action={createCategory}>
           <FormField
             name="categoryName"
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>¿Cuál es el nombre de la categoría?</FormLabel>
+                <FormLabel>¿Cuál es tu nombre completo?</FormLabel>
                 <FormControl>
                   <input
                     type="text"
@@ -63,13 +65,12 @@ export default function CreateCategoryForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Descripción</FormLabel>
+                <FormLabel>¿Cuál es tu nombre completo?</FormLabel>
                 <FormControl>
                   <textarea
                     required
                     {...field}
-                    className="flex-1 block w-full px-3 py-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
-                    "
+                    className="flex-1 block w-full px-3 py-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </FormControl>
                 <FormMessage />
@@ -81,10 +82,11 @@ export default function CreateCategoryForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Sube una imagen de la categoría</FormLabel>
+                <FormLabel>¿Podrías subir una foto de la categoría?</FormLabel>
                 <FormControl>
                   <input
                     type="file"
+                    required
                     {...field}
                     className="flex-1 block w-full px-3 py-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
