@@ -48,7 +48,7 @@ export function CarouselPlugin() {
                         height={550}
                         className="object-cover w-full"
                       />
-                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold bg-black bg-opacity-50">
+                      <span className="absolute inset-0 flex items-start justify-center text-white text-2xl md:text-7xl font-bold bg-black bg-opacity-50 py-8">
                         {category.categoryName}
                       </span>
                     </>
