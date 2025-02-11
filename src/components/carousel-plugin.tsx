@@ -29,24 +29,29 @@ export function CarouselPlugin() {
   return (
     <Carousel
       plugins={[plugin.current]}
-      className="w-full max-w-xs"
+      className="w-full"
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
     >
       <CarouselContent>
         {categories.map((category) => (
           <CarouselItem key={category.id}>
-            <div className="p-1">
-              <Card>
-                <CardContent className="flex items-center justify-center">
+            <div className="relative w-full">
+              <Card className="w-full">
+                <CardContent className="relative flex items-center justify-center w-full">
                   {category.imageUrl ? (
-                    <Image
-                      src={category.imageUrl}
-                      alt={category.categoryName}
-                      width={850}
-                      height={550}
-                      className="rounded-lg object-cover"
-                    />
+                    <>
+                      <Image
+                        src={category.imageUrl}
+                        alt={category.categoryName}
+                        width={850}
+                        height={550}
+                        className="object-cover w-full"
+                      />
+                      <span className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold bg-black bg-opacity-50">
+                        {category.categoryName}
+                      </span>
+                    </>
                   ) : (
                     <span className="text-4xl font-semibold">No Image</span>
                   )}
