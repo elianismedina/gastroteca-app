@@ -2,7 +2,6 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-
 import { handleDeleteCategory } from "@/actions/actions";
 
 export default async function CategoriesPage() {
