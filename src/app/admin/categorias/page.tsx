@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+
+import { handleDeleteCategory } from "@/actions/actions";
 
 export default async function CategoriesPage() {
   // Fetch categories from the database
@@ -39,10 +42,12 @@ export default async function CategoriesPage() {
                   {/* Category Image */}
                   <td className="border p-2">
                     {category.imageUrl ? (
-                      <img
+                      <Image
                         src={category.imageUrl}
                         alt={category.categoryName}
-                        className="w-12 h-12 object-cover rounded-md"
+                        width={200}
+                        height={200}
+                        className="object-cover rounded-md"
                       />
                     ) : (
                       <span className="text-gray-400">No Hay Imagen</span>
@@ -62,7 +67,16 @@ export default async function CategoriesPage() {
                     <Link href={`/admin/categorias/${category.id}/edit`}>
                       <Button variant="outline">Editar</Button>
                     </Link>
-                    {/* Add delete logic later */}
+                    <form action={handleDeleteCategory}>
+                      <input
+                        type="hidden"
+                        name="categoryId"
+                        value={category.id}
+                      />
+                      <Button type="submit" variant="destructive">
+                        Eliminar
+                      </Button>
+                    </form>
                   </td>
                 </tr>
               ))}

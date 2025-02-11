@@ -1,6 +1,6 @@
 "use server";
 import { prisma } from "../lib/prisma";
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "../lib/cloudinary";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -31,8 +31,8 @@ export async function createCategory(formData: FormData) {
       imageUrl: imageUrl,
     },
   });
-  revalidatePath("/");
-  redirect("/");
+  revalidatePath("/categorias");
+  redirect("/categorias");
 }
 interface UploadResult {
   url: string;
@@ -67,8 +67,57 @@ async function uploadImage(file: File): Promise<string> {
     throw error;
   }
 }
+export async function deleteCategory(categoryId: string) {
+  try {
+    // Find the category to get the image URL
+    const category = await prisma.category.findUnique({
+      where: { id: categoryId },
+    });
+
+    if (!category) {
+      throw new Error("Category not found");
+    }
+
+    // Delete the image from Cloudinary if it exists
+    if (category.imageUrl) {
+      const publicId = getPublicId(category.imageUrl);
+      if (publicId) {
+        console.log("Deleting image from Cloudinary", publicId);
+        await cloudinary.uploader.destroy(publicId);
+      } else {
+        console.warn("No public ID found for image", category.imageUrl);
+      }
+    }
+
+    // Delete the category from the database
+    await prisma.category.delete({
+      where: { id: categoryId },
+    });
+
+    // Revalidate the categories page
+    revalidatePath("/admin/categorias");
+    redirect("/admin/categorias");
+  } catch (error) {
+    console.error("Error deleting category:", error);
+    throw error;
+  }
+}
+
+function getPublicId(imageUrl: string): string | null {
+  const match = imageUrl.match(/\/v\d+\/(.+?)\.\w+$/);
+  return match ? match[1] : null;
+}
+
+export async function handleDeleteCategory(formData: FormData) {
+  const categoryId = formData.get("categoryId") as string;
+  if (!categoryId) {
+    throw new Error("Category ID is required");
+  }
+  await deleteCategory(categoryId);
+}
+
 export const login = async () => {
-  await signIn("github", { redirectTo: "/quote" });
+  await signIn("github", { redirectTo: "/" });
 };
 export const logout = async () => {
   await signOut({ redirectTo: "/" });
