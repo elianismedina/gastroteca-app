@@ -47,7 +47,7 @@ export default function CategoryForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>¿Cuál es tu nombre completo?</FormLabel>
+                <FormLabel>¿Cuál es el nombre de la categoría?</FormLabel>
                 <FormControl>
                   <input
                     type="text"
@@ -65,7 +65,7 @@ export default function CategoryForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>¿Cuál es tu nombre completo?</FormLabel>
+                <FormLabel>¿Cuál es la descripción?</FormLabel>
                 <FormControl>
                   <textarea
                     required

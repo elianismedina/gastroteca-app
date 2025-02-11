@@ -31,8 +31,8 @@ export async function createCategory(formData: FormData) {
       imageUrl: imageUrl,
     },
   });
-  revalidatePath("/categorias");
-  redirect("/categorias");
+  revalidatePath("/admin/categorias");
+  redirect("/admin/categorias");
 }
 interface UploadResult {
   url: string;
