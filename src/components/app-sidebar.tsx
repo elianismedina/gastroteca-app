@@ -15,6 +15,7 @@ import UserButton from "../components/UserButtton";
 import { signIn } from "next-auth/react";
 import { Button } from "./ui/button";
 import { useSession } from "next-auth/react";
+import Logo from "./Logo";
 
 // Menu items.
 const items = [
@@ -69,6 +70,7 @@ export function AppSidebar() {
                 {user && <UserButton user={user} />}
                 {!user && session.status !== "loading" && <SignInButton />}
               </div>
+              <Logo />
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

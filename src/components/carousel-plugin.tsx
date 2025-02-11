@@ -15,7 +15,12 @@ import { getCategories } from "@/actions/actions";
 
 export function CarouselPlugin() {
   const [categories, setCategories] = React.useState<
-    { id: string; imageUrl: string; categoryName: string }[]
+    {
+      id: string;
+      imageUrl: string;
+      categoryName: string;
+      description: string;
+    }[]
   >([]);
 
   React.useEffect(() => {
@@ -23,7 +28,7 @@ export function CarouselPlugin() {
   }, []);
 
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
+    Autoplay({ delay: 3000, stopOnInteraction: true })
   );
 
   return (
@@ -48,9 +53,14 @@ export function CarouselPlugin() {
                         height={550}
                         className="object-cover w-full"
                       />
-                      <span className="absolute inset-0 flex items-start justify-center text-white text-2xl md:text-7xl font-bold bg-black bg-opacity-50 py-8">
-                        {category.categoryName}
-                      </span>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-black bg-opacity-50 py-12 md:py-24 gap-2">
+                        <span className="text-2xl md:text-7xl font-bold">
+                          {category.categoryName}
+                        </span>
+                        <span className="text-lg md:text-2xl px-2 py-1">
+                          {category.description}
+                        </span>
+                      </div>
                     </>
                   ) : (
                     <span className="text-4xl font-semibold">No Image</span>

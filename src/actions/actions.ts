@@ -126,13 +126,20 @@ export async function getCategories() {
   try {
     const categories = await prisma.category.findMany({
       orderBy: { createdAt: "desc" },
-      select: { id: true, imageUrl: true, categoryName: true }, // Ensure correct fields
+      select: {
+        id: true,
+        imageUrl: true,
+        categoryName: true,
+        description: true,
+      }, // Ensure correct fields
     });
 
     // Ensure imageUrl is always a string (not null)
     return categories.map((category) => ({
       ...category,
-      imageUrl: category.imageUrl ?? "", // Convert null to empty string
+      imageUrl: category.imageUrl ?? "",
+      description: category.description ?? "",
+      // Convert null to empty string
     }));
   } catch (error) {
     console.error("Error fetching categories:", error);
