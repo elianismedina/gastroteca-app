@@ -130,25 +130,6 @@ export default function MenuitemForm() {
             )}
           />
           <FormField
-            name="isAvailable"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>¿Está disponible?</FormLabel>
-                <FormControl>
-                  <input
-                    type="checkbox"
-                    {...field}
-                    checked={field.value}
-                    onChange={(e) => field.onChange(e.target.checked)} // Handle change
-                    className="flex-1 block w-full px-3 py-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
             name="categoryId"
             control={form.control}
             render={({ field }) => (
@@ -171,6 +152,26 @@ export default function MenuitemForm() {
               </FormItem>
             )}
           />
+          <FormField
+            name="isAvailable"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>¿Está disponible?</FormLabel>
+                <FormControl>
+                  <input
+                    type="checkbox"
+                    {...field}
+                    checked={field.value}
+                    onChange={(e) => field.onChange(e.target.checked)} // Handle change
+                    className="flex-1 block w-full px-3 py-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="flex justify-center mt-4">
             <SubmitButton type="submit">Enviar</SubmitButton>
           </div>

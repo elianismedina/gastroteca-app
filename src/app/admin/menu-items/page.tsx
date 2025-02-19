@@ -61,6 +61,8 @@ export default async function MenuItemPage() {
                   <td className="border p-2">
                     {menuitem.description || "No hay descripción"}
                   </td>
+                  {/* Category Price */}
+                  <td className="border p-2">{menuitem.price}</td>
 
                   {/* Actions */}
                   <td className="border p-2 flex gap-2">
@@ -70,7 +72,7 @@ export default async function MenuItemPage() {
                     <form action={handleDeleteMenuItem}>
                       <input
                         type="hidden"
-                        name="categoryId"
+                        name="menuitemId"
                         value={menuitem.id}
                       />
                       <Button type="submit" variant="destructive">
