@@ -125,13 +125,16 @@ export async function handleDeleteMenuItem(formData: FormData) {
 export async function getMenuItems() {
   try {
     const menuitems = await prisma.menuItem.findMany({
-      orderBy: { createdAt: "desc" },
       select: {
         id: true,
-        imageUrl: true,
         name: true,
         description: true,
         price: true,
+        imageUrl: true,
+        isAvailable: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       }, // Ensure correct fields
     });
 
