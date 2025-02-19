@@ -34,6 +34,14 @@ export async function createMenuItem(formData: FormData) {
   revalidatePath("/admin/menu-items");
   redirect("/admin/menu-items");
 }
+export async function getCategories() {
+  return await prisma.category.findMany({
+    select: {
+      id: true,
+      categoryName: true,
+    },
+  });
+}
 interface UploadResult {
   url: string;
 }
@@ -70,12 +78,12 @@ async function uploadMenuImage(file: File): Promise<string> {
 export async function deleteMenuItem(menuitemId: string) {
   try {
     // Find the category to get the image URL
-    const menuitem = await prisma.category.findUnique({
+    const menuitem = await prisma.menuItem.findUnique({
       where: { id: menuitemId },
     });
 
     if (!menuitem) {
-      throw new Error("Category not found");
+      throw new Error("Menu item not found");
     }
 
     // Delete the image from Cloudinary if it exists
@@ -136,7 +144,7 @@ export async function getMenuItems() {
       // Convert null to empty string
     }));
   } catch (error) {
-    console.error("Error fetching categories:", error);
+    console.error("Error fetching menu items:", error);
     return [];
   }
 }
